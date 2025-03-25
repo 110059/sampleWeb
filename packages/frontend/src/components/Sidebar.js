@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 const Sidebar = () => {
   return (
     <div
-      className="col-md-3 bg-light p-4"
-      style={{ height: "calc(100vh - 200px)", overflowY: "auto" }}
+      className="col-md-3 bg-light p-4 d-flex flex-column"
+      style={{ height: "100vh", overflowY: "auto" }}
     >
       <h4>Navigation</h4>
       <ul className="nav flex-column">
@@ -15,7 +15,7 @@ const Sidebar = () => {
         </li>
 
         <li className="nav-item">
-          <Link to="/face-detection" className="nav-link">
+          <Link to="/dashboard/face-detection" className="nav-link">
             Face Detection
           </Link>
         </li>

@@ -1,18 +1,16 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import Link from react-router-dom
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if a token exists in localStorage (user is logged in)
     const token = localStorage.getItem("token");
 
     if (token) {
-      // Redirect to the Dashboard if the user is already logged in
       navigate("/dashboard");
     }
-  }, [navigate]); // Empty dependency array ensures this runs once when component mounts
+  }, [navigate]);
 
   return (
     <div className="container text-center mt-5">
