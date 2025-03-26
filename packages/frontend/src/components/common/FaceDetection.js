@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 import * as tf from "@tensorflow/tfjs";
 import * as blazeface from "@tensorflow-models/blazeface";
-import draw from "./utilities"; // Ensure this function is correctly implemented
+import draw from "../../utilities/utilities"; // Ensure this function is correctly implemented
 
 function FaceDetection() {
   const webcamRef = useRef(null);

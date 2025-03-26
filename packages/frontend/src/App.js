@@ -4,14 +4,14 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ProtectedRoute from "./components/ProtectedRoute";
-import NotFound from "./components/NotFound";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
+import NotFound from "./pages/NotFound";
 import Unauthorized from "./pages/Unauthorized";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserDashboard from "./pages/UserDashboard";
 import ManageProfile from "./components/admin/ManageProfile";
 import UserProfile from "./components/user/UserProfile";
-import FaceDetection from "./components/FaceDetection";
+import FaceDetection from "./components/common/FaceDetection";
 
 function App() {
   return (

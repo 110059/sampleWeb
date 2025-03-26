@@ -4,12 +4,10 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const router = express.Router();
 
-// Test API route
 router.get("/test", (req, res) => {
   res.json({ message: "Hello, this is a test API!" });
 });
 
-// Register user
 router.post("/register", async (req, res) => {
   const { username, password, role } = req.body; // Accept role from frontend
 
@@ -19,7 +17,6 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // const hashedPassword = await bcrypt.hash(password, 10);
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const newUser = new User({
@@ -36,7 +33,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login user
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
