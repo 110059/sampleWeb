@@ -15,14 +15,21 @@ const Login = () => {
         process.env.REACT_APP_API_URL + process.env.REACT_APP_API_LOGIN,
         { username, password }
       );
+
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", username);
+      localStorage.setItem("role", response.data.role); // Save role in localStorage
       localStorage.setItem(
         "token_expiry",
         new Date().getTime() + 15 * 60 * 1000
       );
 
-      navigate("/dashboard");
+      // Redirect based on role
+      if (response.data.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/user");
+      }
     } catch (err) {
       setError(err.response ? err.response.data.message : "Server error");
     }

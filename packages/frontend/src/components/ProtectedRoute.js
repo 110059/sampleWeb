@@ -1,17 +1,19 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-// ProtectedRoute component to check if user is logged in
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ allowedRoles }) => {
   const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("role"); // Fetch user role
 
-  // If no token, redirect to login page
   if (!token) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
-  // If token exists, allow access to the dashboard or other protected pages
-  return children;
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/unauthorized" replace />; // Redirect if role is not allowed
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

@@ -5,15 +5,21 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setTimeout(() => {
-      navigate("/dashboard"); // Redirect to dashboard after 3 seconds
-    }, 3000);
+    const role = localStorage.getItem("role");
+
+    if (role === "admin") {
+      navigate("/admin");
+    } else if (role === "user") {
+      navigate("/user");
+    } else {
+      navigate("/login");
+    }
   }, [navigate]);
 
   return (
     <div className="text-center">
       <h2>404 - Page Not Found</h2>
-      <p>Redirecting to Dashboard...</p>
+      <p>Redirecting...</p>
     </div>
   );
 };

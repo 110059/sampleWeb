@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user"); // Default role
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
@@ -13,14 +14,15 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        process.env.REACT_APP_API_URL + process.env.REACT_APP_API_REGISTER,
-        { username, password }
+        `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_REGISTER}`,
+        { username, password, role }
       );
+
       if (response) {
-        setSuccess("Registration successful! You can now log in.");
+        setSuccess("Registration successful! Redirecting to login...");
         setError("");
+        setTimeout(() => navigate("/login"), 2000);
       }
-      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       setError(err.response ? err.response.data.message : "Server error");
       setSuccess("");
@@ -48,13 +50,28 @@ const Register = () => {
               </div>
               <div className="form-group mt-3">
                 <label>Password</label>
+
                 <input
                   type="password"
                   className="form-control"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).{8,}"
+                  title="Must contain at least one number, one uppercase, one lowercase, one special character, and at least 8 characters"
                   required
                 />
+              </div>
+              <div className="form-group mt-3">
+                <label>Role</label>
+                <select
+                  className="form-control"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  required
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
               </div>
               <button type="submit" className="btn btn-primary mt-3 w-100">
                 Register

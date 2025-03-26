@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   return (
     <div className="d-flex flex-column" style={{ height: "85vh" }}>
       <div className="d-flex flex-grow-1 overflow-hidden">
@@ -20,4 +20,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

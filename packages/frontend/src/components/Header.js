@@ -23,22 +23,22 @@ const Header = () => {
       <div className="container">
         <div className="row">
           <div className="col-6">
-            <h2>VedTry</h2>
+            {/* Homepage link added to VedTry */}
+            <h2 style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
+              VedTry
+            </h2>
           </div>
           <div className="col-6 text-right d-flex justify-content-end align-items-center">
             {/* Show username and logout button only if user is logged in */}
             {token ? (
               <>
                 <span className="mr-3">Hello, {username}</span>&nbsp;&nbsp;
-                {"   "}
                 {/* Display username */}
                 <button className="btn btn-danger" onClick={handleLogout}>
                   Logout
                 </button>
               </>
-            ) : (
-              ""
-            )}
+            ) : null}
           </div>
         </div>
       </div>

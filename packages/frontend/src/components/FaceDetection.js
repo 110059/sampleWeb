@@ -7,61 +7,62 @@ import draw from "./utilities"; // Ensure this function is correctly implemented
 function FaceDetection() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  let modelRef = useRef(null);
+  let intervalRef = useRef(null);
 
   useEffect(() => {
     const loadModel = async () => {
       try {
-        // Force TensorFlow.js to use WebGL or CPU
-        await tf.setBackend("webgl"); // Try WebGL first
+        await tf.setBackend("webgl"); // Use WebGL for better performance
         await tf.ready(); // Ensure TensorFlow.js is ready
 
-        // Load the face detection model
-        const model = await blazeface.load();
+        modelRef.current = await blazeface.load();
         console.log("FaceDetection Model Loaded");
 
-        const detectFace = async () => {
-          if (webcamRef.current && webcamRef.current.video.readyState === 4) {
-            const video = webcamRef.current.video;
-            const videoWidth = video.videoWidth;
-            const videoHeight = video.videoHeight;
-
-            // Set video and canvas dimensions
-            webcamRef.current.video.width = videoWidth;
-            webcamRef.current.video.height = videoHeight;
-            canvasRef.current.width = videoWidth;
-            canvasRef.current.height = videoHeight;
-
-            // Detect faces
-            const predictions = await model.estimateFaces(video, false);
-
-            console.log(predictions); // Debugging output
-
-            // Draw the results
-            const ctx = canvasRef.current.getContext("2d");
-            ctx.clearRect(
-              0,
-              0,
-              canvasRef.current.width,
-              canvasRef.current.height
-            );
-            draw(predictions, ctx);
-          }
-        };
-
-        // Run face detection every 100ms
-        const interval = setInterval(detectFace, 100);
-
-        // Cleanup on unmount
-        return () => {
-          clearInterval(interval);
-          tf.disposeVariables(); // Dispose TensorFlow variables
-        };
+        startFaceDetection();
       } catch (error) {
         console.error("Error loading model:", error);
       }
     };
 
+    const startFaceDetection = () => {
+      intervalRef.current = setInterval(async () => {
+        if (
+          webcamRef.current &&
+          webcamRef.current.video.readyState === 4 &&
+          modelRef.current
+        ) {
+          const video = webcamRef.current.video;
+          const videoWidth = video.videoWidth;
+          const videoHeight = video.videoHeight;
+
+          webcamRef.current.video.width = videoWidth;
+          webcamRef.current.video.height = videoHeight;
+          canvasRef.current.width = videoWidth;
+          canvasRef.current.height = videoHeight;
+
+          const predictions = await modelRef.current.estimateFaces(video, false);
+          console.log(predictions); // Debugging output
+
+          const ctx = canvasRef.current?.getContext("2d");
+          if (ctx) {
+            ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            draw(predictions, ctx);
+          }
+        }
+      }, 100);
+    };
+
     loadModel();
+
+    return () => {
+      clearInterval(intervalRef.current); // Stop face detection
+      if (modelRef.current) {
+        modelRef.current.dispose(); // Dispose TensorFlow model
+        modelRef.current = null;
+      }
+      tf.disposeVariables(); // Cleanup TensorFlow variables
+    };
   }, []);
 
   return (

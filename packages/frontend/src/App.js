@@ -1,83 +1,48 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
-import Layout from "./components/Layout"; // Import the Layout component
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-import FaceDetection from "./components/FaceDetection";
 import NotFound from "./components/NotFound";
+import Unauthorized from "./pages/Unauthorized";
+import AdminDashboard from "./pages/AdminDashboard";
+import UserDashboard from "./pages/UserDashboard";
+import ManageProfile from "./components/admin/ManageProfile";
+import UserProfile from "./components/user/UserProfile";
+import FaceDetection from "./components/FaceDetection";
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          {/* Public Routes with Layout */}
-          <Route
-            path="/"
-            element={
-              <Layout>
-                <Home />
-              </Layout>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <Layout>
-                <Login />
-              </Layout>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <Layout>
-                <Register />
-              </Layout>
-            }
-          />
+          {/* Public Routes */}
+          <Route path="/" element={<Layout><Home /></Layout>} />
+          <Route path="/login" element={<Layout><Login /></Layout>} />
+          <Route path="/register" element={<Layout><Register /></Layout>} />
+          <Route path="/unauthorized" element={<Layout><Unauthorized /></Layout>} />
 
-          {/* Forwarder Route */}
-          <Route
-            path="/face-detection"
-            element={<Navigate to="/dashboard/face-detection" replace />}
-          />
-
-          {/* Protected Dashboard Layout */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  {" "}
-                  {/* Wrap Dashboard with Layout */}
-                  <Dashboard />
-                </Layout>
-              </ProtectedRoute>
-            }
-          >
-            {/* Nested Routes Inside Dashboard */}
-            <Route index element={<h3>Welcome to Your Dashboard</h3>} />
-            <Route path="face-detection" element={<FaceDetection />} />
+          {/* Admin Routes */}
+          <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]} />}>
+            <Route index element={<Layout><AdminDashboard /></Layout>} />
+            <Route path="manage-profile" element={<Layout><ManageProfile /></Layout>} />
           </Route>
 
-          {/* Catch-all Route for 404 */}
-          <Route
-            path="*"
-            element={
-              <Layout>
-                <NotFound />
-              </Layout>
-            }
-          />
+          {/* User Routes (Admins cannot access `/user/manage-profile`) */}
+          <Route path="/user" element={<ProtectedRoute allowedRoles={["user"]} />}>
+            <Route index element={<Layout><UserDashboard /></Layout>} />
+            <Route path="manage-profile" element={<Layout><UserProfile /></Layout>} />
+          </Route>
+
+          {/* Common Feature Route (Face Detection) */}
+          <Route path="/face-detection" element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
+            <Route index element={<Layout><FaceDetection /></Layout>} />
+          </Route>
+
+          {/* Catch-All 404 */}
+          <Route path="*" element={<Layout><NotFound /></Layout>} />
         </Routes>
       </div>
     </Router>
