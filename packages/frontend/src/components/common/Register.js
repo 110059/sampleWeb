@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("VedTry@123");
   const [role, setRole] = useState("user"); // Default role
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
