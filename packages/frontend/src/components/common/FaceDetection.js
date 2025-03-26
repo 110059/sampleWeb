@@ -3,6 +3,7 @@ import Webcam from "react-webcam";
 import * as tf from "@tensorflow/tfjs";
 import * as blazeface from "@tensorflow-models/blazeface";
 import draw from "../../utilities/utilities"; // Ensure this function is correctly implemented
+import Sidebar from "../common/Sidebar"; // Import Sidebar
 
 function FaceDetection() {
   const webcamRef = useRef(null);
@@ -66,40 +67,33 @@ function FaceDetection() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <Webcam
-          ref={webcamRef}
-          style={{
-            position: "absolute",
-            marginLeft: "auto",
-            marginRight: "auto",
-            top: 100,
-            left: 0,
-            right: 80,
-            textAlign: "center",
-            zIndex: 9,
-            width: 640,
-            height: 480,
-          }}
-        />
+    <div className="d-flex" style={{ height: "85vh" }}>
+      {/* Sidebar */}
+      <Sidebar />
 
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: "absolute",
-            marginLeft: "auto",
-            marginRight: "auto",
-            top: 100,
-            left: 0,
-            right: 80,
-            textAlign: "center",
-            zIndex: 9,
-            width: 640,
-            height: 480,
-          }}
-        />
-      </header>
+      {/* Main Content */}
+      <div className="col-md-9 d-flex flex-column align-items-center justify-content-center">
+        <h2>Face Detection</h2>
+        <div style={{ position: "relative", width: 640, height: 480 }}>
+          <Webcam
+            ref={webcamRef}
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+
+          <canvas
+            ref={canvasRef}
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }

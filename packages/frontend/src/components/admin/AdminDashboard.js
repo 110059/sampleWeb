@@ -11,6 +11,13 @@ const AdminDashboard = () => {
 
         {/* Main Content */}
         <div className="col-md-9 d-flex flex-column">
+          <div className="p-3">
+            <h2 className="text-primary">Welcome to Admin Dashboard</h2>
+            <p className="text-muted">
+              Manage users, settings, and AI features from here.
+            </p>
+          </div>
+
           <div className="flex-grow-1 p-3 overflow-auto">
             <Outlet />
           </div>

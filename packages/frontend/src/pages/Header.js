@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
 
-  // Fetch the token and username from localStorage (if available)
-  const token = localStorage.getItem("token");
-  const username = localStorage.getItem("username"); // assuming you save username during login
+  // Fetch the token and username from sessionStorage (if available)
+  const token = sessionStorage.getItem("token");
+  const username = sessionStorage.getItem("username"); // assuming you save username during login
 
   // Logout functionality
   const handleLogout = () => {
-    // Remove token and username from localStorage
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    localStorage.removeItem("token_expiry");
+    // Remove token and username from sessionStorage
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("token_expiry");
 
     // Redirect to Login page
     navigate("/login");

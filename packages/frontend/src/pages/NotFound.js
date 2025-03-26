@@ -5,7 +5,7 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const role = localStorage.getItem("role");
+    const role = sessionStorage.getItem("role");
 
     if (role === "admin") {
       navigate("/admin");

@@ -2,8 +2,8 @@ import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = ({ allowedRoles }) => {
-  const token = localStorage.getItem("token");
-  const userRole = localStorage.getItem("role"); // Fetch user role
+  const token = sessionStorage.getItem("token");
+  const userRole = sessionStorage.getItem("role"); // Fetch user role
 
   if (!token) {
     return <Navigate to="/login" replace />;

@@ -11,6 +11,13 @@ const UserDashboard = () => {
 
         {/* Main Content */}
         <div className="col-md-9 d-flex flex-column">
+          <div className="p-3">
+            <h2 className="text-primary">Welcome to User Dashboard</h2>
+            <p className="text-muted">
+              Access your profile, AI features, and other functionalities here.
+            </p>
+          </div>
+
           <div className="flex-grow-1 p-3 overflow-auto">
             <Outlet />
           </div>

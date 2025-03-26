@@ -16,13 +16,10 @@ const Login = () => {
         { username, password }
       );
 
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("username", username);
-      localStorage.setItem("role", response.data.role); // Save role in localStorage
-      localStorage.setItem(
-        "token_expiry",
-        new Date().getTime() + 15 * 60 * 1000
-      );
+      sessionStorage.setItem("token", response.data.token);
+      sessionStorage.setItem("username", username);
+      sessionStorage.setItem("role", response.data.role); // Save role in sessionStorage
+      sessionStorage.setItem("token_expiry", new Date().getTime() + 30 * 60 * 1000); //30min
 
       // Redirect based on role
       if (response.data.role === "admin") {
