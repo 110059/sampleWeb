@@ -16,13 +16,15 @@ const Login = () => {
         { username, password }
       );
 
+      console.log('uiresponse', response);
+
       sessionStorage.setItem("token", response.data.token);
       sessionStorage.setItem("username", username);
       sessionStorage.setItem("role", response.data.role); // Save role in sessionStorage
       sessionStorage.setItem("token_expiry", new Date().getTime() + 30 * 60 * 1000); //30min
 
       // Redirect based on role
-      if (response.data.role === "admin") {
+      if (response.data.role === "admin" || response.data.role === "superuser") {
         navigate("/admin");
       } else {
         navigate("/user");

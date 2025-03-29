@@ -1,0 +1,9 @@
+.user-row.active td {
+    background-color: #d4edda !important;
+    /* Green */
+}
+
+.user-row.disabled td {
+    background-color: #f8d7da !important;
+    /* Red */
+}

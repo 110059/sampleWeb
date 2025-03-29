@@ -67,7 +67,7 @@ const Sidebar = () => {
         </li>
 
         {/* Role-based links */}
-        {role === "admin" ? (
+        {(role === "admin" || role === "superuser") ? (
           <li className="nav-item">
             <Link to="/admin/manage-profile" className="nav-link d-flex align-items-center text-danger">
               <FaUser className="me-2" />

@@ -1,26 +1,29 @@
 const jwt = require("jsonwebtoken");
 
-const authMiddleware = (roles = []) => {
-  return (req, res, next) => {
-    const token = req.headers.authorization?.split(" ")[1];
+const authMiddleware = (roles) => (req, res, next) => {
+  const authHeader = req.header("Authorization");
+  console.log("Authorization Header:", authHeader);
 
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded Token:", decoded);
+
+    // Automatically allow superuser to access all protected routes
+    if (decoded.role === "superuser" || (roles && roles.includes(decoded.role))) {
       req.user = decoded;
-
-      if (roles.length && !roles.includes(req.user.role)) {
-        return res
-          .status(403)
-          .json({ message: "Forbidden: Insufficient permissions" });
-      }
-
-      next();
-    } catch (error) {
-      res.status(401).json({ message: "Invalid token" });
+      return next();
     }
-  };
+
+    return res.status(403).json({ message: "Access Denied: Insufficient Permissions" });
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
 };
 
 module.exports = authMiddleware;

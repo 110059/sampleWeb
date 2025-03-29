@@ -7,7 +7,7 @@ const NotFound = () => {
   useEffect(() => {
     const role = sessionStorage.getItem("role");
 
-    if (role === "admin") {
+    if (role === "admin" || role === "superuser") {
       navigate("/admin");
     } else if (role === "user") {
       navigate("/user");

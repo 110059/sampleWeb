@@ -3,33 +3,46 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const router = express.Router();
+const authMiddleware = require("../middleware/authMiddleware");
+
 
 router.get("/test", (req, res) => {
   res.json({ message: "Hello, this is a test API!" });
 });
 
 router.post("/register", async (req, res) => {
-  const { username, password, role } = req.body; // Accept role from frontend
-
   try {
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+    const { name, username, email, password, role } = req.body;
+
+    // Validate required fields
+    if (!name || !username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required." });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // Check if user already exists
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      return res.status(400).json({ message: "Username or Email already taken." });
+    }
 
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create new user
     const newUser = new User({
+      name,
       username,
+      email,
       password: hashedPassword,
-      role: role || "user", // Default role is 'user' unless specified
+      role: role || "user",
     });
 
     await newUser.save();
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ message: "User registered successfully!" });
   } catch (error) {
-    console.error("Registration error:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error(error);
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
 
@@ -45,6 +58,13 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "User not found" });
     }
 
+    if (!user.isActive) {
+      console.error("User not active");
+      return res.status(400).json({ message: "User is not active right now, please wait / contact admin for activation." });
+    }
+
+    console.log(user);
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       console.error("Invalid credentials");
@@ -58,11 +78,79 @@ router.post("/login", async (req, res) => {
     );
 
     console.log(`Login successful for ${username}, Role: ${user.role}`);
-    res.json({ token, role: user.role });
+    res.json({ token, role: user.role, isActive: user.isActive });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+
+// Get all active users (Admin only)
+router.get("/users", authMiddleware(["admin"]), async (req, res) => {
+  try {
+    const users = await User.find({ }, "-password");
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Update user details (Admin only)
+router.put("/users/:id", authMiddleware(["admin"]), async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { name, email },
+      { new: true, runValidators: true }
+    ).select("-password");
+    res.json({ message: "User updated successfully!", user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Soft delete user (Admin only)
+router.patch("/users/:id/disable", authMiddleware(["admin"]), async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    console.log('user found:', user);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    user.isActive = !user.isActive;
+    await user.save();
+    res.json({ message: `User ${user.isActive ? "enabled" : "disabled"} successfully!` });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/users/:id/role", authMiddleware(["admin"]), async (req, res) => {
+  try {
+    const { role } = req.body;
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Prevent role change if the user is a superuser
+    if (user.role === "superuser") {
+      return res.status(403).json({ message: "Superuser role cannot be changed" });
+    }
+
+    user.role = role;
+    await user.save();
+
+    res.json({ message: "User role updated successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
+
 
 module.exports = router;

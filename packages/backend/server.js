@@ -14,7 +14,7 @@ const app = express();
 app.use(
   cors({
     origin: process.env.UI_WEB_URL, // Allow requests only from this origin (your frontend URL)
-    methods: ["GET", "POST"], // Allow only these methods (can be adjusted as needed)
+    methods: ["GET", "POST", "PUT", "PATCH"], // Allow only these methods (can be adjusted as needed)
     credentials: true, // Enable cookies if needed
   })
 );

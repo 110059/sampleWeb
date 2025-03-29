@@ -3,19 +3,29 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("VedTry@123");
-  const [role, setRole] = useState("user"); // Default role
+  const [role, setRole] = useState("user");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!name.match(/^[a-zA-Z ]{3,}$/)) {
+      setError("Name must be at least 3 characters and contain only letters.");
+      return;
+    }
+    if (!email.match(/^\S+@\S+\.\S+$/)) {
+      setError("Invalid email format.");
+      return;
+    }
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_REGISTER}`,
-        { username, password, role }
+        { name, username, email, password, role }
       );
 
       if (response) {
@@ -39,6 +49,16 @@ const Register = () => {
             {success && <div className="alert alert-success">{success}</div>}
             <form onSubmit={handleSubmit}>
               <div className="form-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-group mt-3">
                 <label>Username</label>
                 <input
                   type="text"
@@ -49,8 +69,17 @@ const Register = () => {
                 />
               </div>
               <div className="form-group mt-3">
+                <label>Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="form-group mt-3">
                 <label>Password</label>
-
                 <input
                   type="password"
                   className="form-control"
