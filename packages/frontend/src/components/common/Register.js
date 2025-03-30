@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -10,6 +12,8 @@ const Register = () => {
   const [role, setRole] = useState("user");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [phone, setPhone] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,7 +29,7 @@ const Register = () => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_REGISTER}`,
-        { name, username, email, password, role }
+        { name, username, email, password, role, phone }
       );
 
       if (response) {
@@ -37,6 +41,16 @@ const Register = () => {
       setError(err.response ? err.response.data.message : "Server error");
       setSuccess("");
     }
+  };
+
+  const handlePhoneChange = (e) => {
+    const input = e.target.value;
+    setPhone(input);
+
+    const phoneNumber = parsePhoneNumberFromString(input);
+
+    // Use optional chaining to check validity safely
+    setError(phoneNumber?.isValid() ? "" : "Invalid phone number format");
   };
 
   return (
@@ -77,6 +91,17 @@ const Register = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
+              </div>
+              <div className="form-group mt-3">
+                <label>Phone Number (optional)</label>
+                <input
+                  type="tel"
+                  className="form-control"
+                  value={phone}
+                  onChange={handlePhoneChange}
+                  placeholder="Enter phone number (with country code)"
+                />
+                {/* {error && <small className="text-danger">{error}</small>} */}
               </div>
               <div className="form-group mt-3">
                 <label>Password</label>

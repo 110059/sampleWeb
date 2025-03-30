@@ -12,7 +12,7 @@ router.get("/test", (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    const { name, username, email, password, role } = req.body;
+    const { name, username, email, password, role, phone } = req.body;
 
     // Validate required fields
     if (!name || !username || !email || !password) {
@@ -34,6 +34,7 @@ router.post("/register", async (req, res) => {
       name,
       username,
       email,
+      phone,
       password: hashedPassword,
       role: role || "user",
     });

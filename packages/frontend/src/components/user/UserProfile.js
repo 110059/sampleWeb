@@ -25,7 +25,7 @@ const UserProfile = () => {
 
         console.log('profile', response);
 
-        if (response.status === 200) {
+        if (response.status === 200 &&  response.data )  {
           const { experience, companyDetails } = response.data;
     
           setExperienceData(

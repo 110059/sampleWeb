@@ -48,9 +48,10 @@ router.get("/", authMiddleware(["user", "admin", "superadmin"]), async (req, res
     const user = req.user.id; // Extract user ID from token
     const profile = await Profile.findOne({ user });
 
-    if (!profile) {
-      return res.status(404).json({ message: "Profile not found" });
-    }
+    console.log("Profile not found" );
+    // if (!profile) {
+    //   return res.status(404).json({ message: "Profile not found" });
+    // }
 
     res.json(profile);
   } catch (error) {
