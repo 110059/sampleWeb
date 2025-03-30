@@ -23,7 +23,7 @@ router.put("/", authMiddleware(["user", "admin", "superadmin"]), async (req, res
       companyName: company.companyName || "",
       startDate: company.startDate ? new Date(company.startDate) : null,
       endDate: company.endDate ? new Date(company.endDate) : null,
-      isCurrent: company.isPresent || false
+      isCurrent: company.isCurrent || false
     }));
 
     // Update or create profile
@@ -39,6 +39,22 @@ router.put("/", authMiddleware(["user", "admin", "superadmin"]), async (req, res
   } catch (error) {
     console.error("Error updating profile:", error);
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// Get user profile data
+router.get("/", authMiddleware(["user", "admin", "superadmin"]), async (req, res) => {
+  try {
+    const user = req.user.id; // Extract user ID from token
+    const profile = await Profile.findOne({ user });
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    res.json(profile);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 
