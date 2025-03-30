@@ -7,7 +7,8 @@ const profileSchema = new mongoose.Schema({
   experience: [{
     years: { type: Number, min: 0, default: 0 },
     lastWorked: { type: Date, default: null },
-    skills: { type: String, default: "" }
+    skills: { type: String, default: "" },
+    version: {type:Number, min:0, default: 0}
   }],
   companyDetails: [
     {

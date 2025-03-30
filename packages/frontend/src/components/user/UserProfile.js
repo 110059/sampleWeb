@@ -4,7 +4,7 @@ import axios from "axios";
 
 const UserProfile = () => {
   const [experienceData, setExperienceData] = useState([
-    { skills: "", years: "", lastWorked: "" },
+    { skills: "", years: "", lastWorked: "", version: "" },
   ]);
 
   const [companyData, setCompanyData] = useState([
@@ -16,10 +16,13 @@ const UserProfile = () => {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
   };
 
+  const isFormValid = () => {
+    return experienceData.some(exp => exp.skills && exp.years && exp.lastWorked && exp.version) &&
+           companyData.some(comp => comp.companyName && comp.startDate && ((!comp.isPresent && comp.endDate) || comp.isPresent ) );
+  };
+
   const getMaxFutureDate = () => {
-    const now = new Date();
-    now.setMonth(now.getMonth() + 6);
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    return "";
   };
 
   const handleExperienceChange = (index, field, value) => {
@@ -45,7 +48,7 @@ const UserProfile = () => {
         if (i !== index) company.isPresent = false;
       });
       updatedCompanies[index].isPresent = !updatedCompanies[index].isPresent;
-      updatedCompanies[index].endDate = updatedCompanies[index].isPresent ? getMaxFutureDate() : "";
+      updatedCompanies[index].endDate = updatedCompanies[index].isPresent ? "" : getMaxFutureDate();
     } else {
       updatedCompanies[index][field] = value;
     }
@@ -61,7 +64,6 @@ const UserProfile = () => {
       setCompanyData(companyData.filter((_, i) => i !== index));
     }
   };
-
   
   const handleSave = async () => {
     try {
@@ -96,7 +98,7 @@ const UserProfile = () => {
             <div key={index} className="border rounded p-3 mb-3 bg-white">
               <div className="row align-items-center">
                 <div className="col-md-4">
-                  <label className="form-label">Skills *</label>
+                  <label className="form-label">Skill *</label>
                   <input
                     type="text"
                     className="form-control"
@@ -104,8 +106,18 @@ const UserProfile = () => {
                     onChange={(e) => handleExperienceChange(index, "skills", e.target.value)}
                   />
                 </div>
-                <div className="col-md-3">
-                  <label className="form-label">Years of Experience</label>
+                <div className="col-md-1">
+                  <label className="form-label">Version</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={exp.version}
+                    onChange={(e) => handleExperienceChange(index, "version", e.target.value)}
+                    min="0"
+                  />
+                </div>
+                <div className="col-md-2">
+                  <label className="form-label">Experience (Yrs)</label>
                   <input
                     type="number"
                     className="form-control"
@@ -114,7 +126,7 @@ const UserProfile = () => {
                     min="0"
                   />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <label className="form-label">Last Worked</label>
                   <input
                     type="month"
@@ -145,7 +157,7 @@ const UserProfile = () => {
           {companyData.map((company, index) => (
             <div key={index} className="border rounded p-3 mb-3 bg-white">
               <div className="row align-items-center">
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <label className="form-label">Company Name</label>
                   <input
                     type="text"
@@ -160,10 +172,11 @@ const UserProfile = () => {
                     type="month"
                     className="form-control"
                     value={company.startDate}
+                    max= {getCurrentMonthYear()}
                     onChange={(e) => handleCompanyChange(index, "startDate", e.target.value)}
                   />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <label className="form-label">End Date</label>
                   <input
                     type="month"
@@ -172,7 +185,9 @@ const UserProfile = () => {
                     onChange={(e) => handleCompanyChange(index, "endDate", e.target.value)}
                     max={company.isPresent ? getMaxFutureDate() : getCurrentMonthYear()}
                     disabled={company.isPresent}
-                  />
+                  />                 
+                </div>
+                <div className="col-md-2">                
                   <div className="form-check mt-2">
                     <input
                       className="form-check-input"
@@ -180,7 +195,7 @@ const UserProfile = () => {
                       checked={company.isPresent}
                       onChange={() => handleCompanyChange(index, "isPresent")}
                     />
-                    <label className="form-check-label">Currently Working Here</label>
+                    <label className="form-check-label">Present Company</label>
                   </div>
                 </div>
                 {companyData.length > 1 && (
@@ -196,7 +211,7 @@ const UserProfile = () => {
           <button className="btn btn-sm btn-primary" onClick={addCompany}>Add More Company</button>
         </div>
 
-        <button className="btn btn-primary" onClick={handleSave}>Save Profile</button>
+        <button className="btn btn-primary" onClick={handleSave } disabled={!isFormValid()}>Save Profile</button>
       </div>
     </div>
   );
