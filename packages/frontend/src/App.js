@@ -12,11 +12,15 @@ import UserDashboard from "./components/user/UserDashboard";
 import ManageProfile from "./components/admin/ManageProfile";
 import UserProfile from "./components/user/UserProfile";
 import FaceDetection from "./components/common/FaceDetection";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <Router>
       <div className="App">
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Layout><Home /></Layout>} />

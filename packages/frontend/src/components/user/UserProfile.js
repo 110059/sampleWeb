@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../common/Sidebar";
 import axios from "axios";
+import { showSuccessToast, showErrorToast } from "./../../../src/utilities/toast";
+
 
 const UserProfile = () => {
   const [experienceData, setExperienceData] = useState([
@@ -25,7 +27,7 @@ const UserProfile = () => {
 
         console.log('profile', response);
 
-        if (response.status === 200 &&  response.data )  {
+        if (response?.status === 200 &&  response?.data )  {
           const { experience, companyDetails } = response.data;
     
           setExperienceData(
@@ -54,7 +56,9 @@ const UserProfile = () => {
 
         
       } catch (err) {
-        setError(err.response?.data?.message || err.message);
+        const error  = err.response?.data?.message || err.message;
+        setError(error);
+        showErrorToast(error)
       } finally {
         setLoading(false);
       }
@@ -94,9 +98,9 @@ const UserProfile = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert("Profile saved successfully!");
+      showSuccessToast("Profile saved successfully!")
     } catch (error) {
-      alert("Error saving profile: " + (error.response?.data?.message || error.message));
+      showErrorToast("Error saving profile: " + (error.response?.data?.message || error.message));
     }
   };
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../common/Sidebar";
 import axios from "axios";
 import "./../../style/ManageProfile.css";
+import { showErrorToast } from "./../../../src/utilities/toast";
+
 
 const ManageProfile = () => {
   const [users, setUsers] = useState([]);
@@ -27,7 +29,7 @@ const ManageProfile = () => {
 
   const toggleUserStatus = async (id, isSuperAdmin) => {
     if (isSuperAdmin) {
-      alert("Superadmin account cannot be disabled.");
+      showErrorToast("Superadmin account cannot be disabled.");
       return;
     }
 
@@ -44,7 +46,7 @@ const ManageProfile = () => {
 
   const updateUserRole = async (id, newRole, isSuperAdmin) => {
     if (isSuperAdmin) {
-      alert("Superadmin role cannot be changed.");
+      showErrorToast("Superadmin role cannot be changed.");
       return;
     }
 

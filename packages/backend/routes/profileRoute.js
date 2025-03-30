@@ -49,10 +49,7 @@ router.get("/", authMiddleware(["user", "admin", "superadmin"]), async (req, res
     const profile = await Profile.findOne({ user });
 
     console.log("Profile not found" );
-    // if (!profile) {
-    //   return res.status(404).json({ message: "Profile not found" });
-    // }
-
+  
     res.json(profile);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
