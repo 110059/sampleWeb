@@ -16,7 +16,7 @@ const ManageProfile = () => {
   const fetchUsers = async () => {
     try {
       const token = sessionStorage.getItem("token");
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/auth/users`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(response.data);
@@ -33,7 +33,7 @@ const ManageProfile = () => {
 
     try {
       const token = sessionStorage.getItem("token");
-      await axios.patch(`${process.env.REACT_APP_API_URL}/auth/users/${id}/disable`, {}, {
+      await axios.patch(`${process.env.REACT_APP_API_URL}/users/${id}/disable`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchUsers();
@@ -50,7 +50,7 @@ const ManageProfile = () => {
 
     try {
       const token = sessionStorage.getItem("token");
-      await axios.put(`${process.env.REACT_APP_API_URL}/auth/users/${id}/role`, 
+      await axios.put(`${process.env.REACT_APP_API_URL}/users/${id}/role`, 
         { role: newRole },
         { headers: { Authorization: `Bearer ${token}` } }
       );

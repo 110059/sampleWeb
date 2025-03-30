@@ -36,7 +36,7 @@ mongoose
 
 // Use the auth routes
 app.use("/auth", authRoutes);
-//app.use("/users", userRoute);
+app.use("/users", userRoute);
 
 // Start the server
 const port = process.env.PORT || 5000;

@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
+const User = require("../models/User");
 
 // Get all active users (Admin only)
-router.get("/", authMiddleware(["admin"]), async (req, res) => {
+router.get("", authMiddleware(["admin"]), async (req, res) => {
   try {
     const users = await User.find({ }, "-password");
     res.json(users);
@@ -30,7 +31,7 @@ router.put("/:id", authMiddleware(["admin"]), async (req, res) => {
 // Soft delete user (Admin only)
 router.patch("/:id/disable", authMiddleware(["admin"]), async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).select("-password");
     console.log('user found:', user);
     if (!user) return res.status(404).json({ message: "User not found" });
     user.isActive = !user.isActive;
@@ -44,7 +45,7 @@ router.patch("/:id/disable", authMiddleware(["admin"]), async (req, res) => {
 router.put("/:id/role", authMiddleware(["admin"]), async (req, res) => {
   try {
     const { role } = req.body;
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).select("-password");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
