@@ -135,9 +135,9 @@ router.put("/users/:id/role", authMiddleware(["admin"]), async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Prevent role change if the user is a superuser
-    if (user.role === "superuser") {
-      return res.status(403).json({ message: "Superuser role cannot be changed" });
+    // Prevent role change if the user is a superadmin
+    if (user.role === "superadmin") {
+      return res.status(403).json({ message: "superadmin role cannot be changed" });
     }
 
     user.role = role;

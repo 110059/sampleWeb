@@ -9,7 +9,7 @@ const Home = () => {
     const role = sessionStorage.getItem("role");
 
     if (token) {
-      if (role === "admin" || role === "superuser") {
+      if (role === "admin" || role === "superadmin") {
         navigate("/admin");
       } else {
         navigate("/user");

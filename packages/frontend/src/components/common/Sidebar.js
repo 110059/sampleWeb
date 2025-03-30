@@ -67,11 +67,11 @@ const Sidebar = () => {
         </li>
 
         {/* Role-based links */}
-        {(role === "admin" || role === "superuser") ? (
+        {(role === "admin" || role === "superadmin") ? (
           <li className="nav-item">
             <Link to="/admin/manage-profile" className="nav-link d-flex align-items-center text-danger">
               <FaUser className="me-2" />
-              {!isCollapsed && "Manage Profile"}
+              {!isCollapsed && "Manage Profiles"}
             </Link>
           </li>
         ) : (

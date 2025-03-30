@@ -7,7 +7,7 @@ const ManageProfile = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
-  const [roles] = useState(["admin", "user"]); // Superuser role not included
+  const [roles] = useState(["admin", "user"]); // Superadmin role not included
 
   useEffect(() => {
     fetchUsers();
@@ -25,9 +25,9 @@ const ManageProfile = () => {
     }
   };
 
-  const toggleUserStatus = async (id, isSuperUser) => {
-    if (isSuperUser) {
-      alert("Superuser account cannot be disabled.");
+  const toggleUserStatus = async (id, isSuperAdmin) => {
+    if (isSuperAdmin) {
+      alert("Superadmin account cannot be disabled.");
       return;
     }
 
@@ -42,9 +42,9 @@ const ManageProfile = () => {
     }
   };
 
-  const updateUserRole = async (id, newRole, isSuperUser) => {
-    if (isSuperUser) {
-      alert("Superuser role cannot be changed.");
+  const updateUserRole = async (id, newRole, isSuperAdmin) => {
+    if (isSuperAdmin) {
+      alert("Superadmin role cannot be changed.");
       return;
     }
 
@@ -64,7 +64,20 @@ const ManageProfile = () => {
     setSearchTerm(event.target.value);
   };
 
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
   const sortedUsers = [...users].sort((a, b) => {
+    // Always keep Superadmin at the top
+    if (a.role === "superadmin") return -1;
+    if (b.role === "superadmin") return 1;
+
+    // Sorting logic for other users
     if (sortConfig.key) {
       const order = sortConfig.direction === "asc" ? 1 : -1;
       return a[sortConfig.key] > b[sortConfig.key] ? order : -order;
@@ -93,25 +106,34 @@ const ManageProfile = () => {
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
+              <th onClick={() => handleSort("name")}>
+                Name {sortConfig.key === "name" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th onClick={() => handleSort("email")}>
+                Email {sortConfig.key === "email" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
+              <th onClick={() => handleSort("role")}>
+                Role {sortConfig.key === "role" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+              </th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredUsers.map((user) => (
-              <tr key={user._id} className={user.isActive ? "user-row active" : "user-row disabled"}>
+              <tr 
+                key={user._id} 
+                className={`user-row ${user.isActive ? "active" : "disabled"} ${user.role === "superadmin" ? "superadmin-row" : ""}`}
+              >
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>
-                  {user.role === "superuser" ? (
-                    <span className="badge bg-primary">Superuser</span>
+                  {user.role === "superadmin" ? (
+                    <span className="badge bg-primary">Superadmin</span>
                   ) : (
                     <select 
                       value={user.role} 
-                      onChange={(e) => updateUserRole(user._id, e.target.value, user.role === "superuser")}
+                      onChange={(e) => updateUserRole(user._id, e.target.value, user.role === "superadmin")}
                       className="form-control"
                     >
                       {roles.map(role => (
@@ -124,7 +146,7 @@ const ManageProfile = () => {
                 <td>
                   <button
                     className={`btn btn-${user.isActive ? "danger" : "success"} btn-sm`}
-                    onClick={() => toggleUserStatus(user._id, user.role === "superuser")}
+                    onClick={() => toggleUserStatus(user._id, user.role === "superadmin")}
                   >
                     {user.isActive ? "Disable" : "Enable"}
                   </button>

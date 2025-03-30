@@ -25,7 +25,7 @@ function App() {
           <Route path="/unauthorized" element={<Layout><Unauthorized /></Layout>} />
 
           {/* Admin Routes */}
-          <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin", "superuser"]} />}>
+          <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin", "superadmin"]} />}>
             <Route index element={<Layout><AdminDashboard /></Layout>} />
             <Route path="manage-profile" element={<Layout><ManageProfile /></Layout>} />
           </Route>
@@ -37,7 +37,7 @@ function App() {
           </Route>
 
           {/* Common Feature Route (Face Detection) */}
-          <Route path="/face-detection" element={<ProtectedRoute allowedRoles={["user", "admin", "superuser"]} />}>
+          <Route path="/face-detection" element={<ProtectedRoute allowedRoles={["user", "admin", "superadmin"]} />}>
             <Route index element={<Layout><FaceDetection /></Layout>} />
           </Route>
 

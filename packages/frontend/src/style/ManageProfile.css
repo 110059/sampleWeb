@@ -7,3 +7,9 @@
     background-color: #f8d7da !important;
     /* Red */
 }
+
+.superadmin-row {
+    background-color: #ffd700 !important;
+    /* Gold background */
+    font-weight: bold;
+}

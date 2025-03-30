@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const authRoutes = require("./routes/auth"); // Import your auth.js file
-const cors = require("cors"); // Import cors
+const authRoutes = require("./routes/auth");
+const userRoute = require("./routes/userRoute");
+const cors = require("cors");
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +36,7 @@ mongoose
 
 // Use the auth routes
 app.use("/auth", authRoutes);
+//app.use("/users", userRoute);
 
 // Start the server
 const port = process.env.PORT || 5000;

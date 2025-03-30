@@ -14,8 +14,8 @@ const authMiddleware = (roles) => (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Decoded Token:", decoded);
 
-    // Automatically allow superuser to access all protected routes
-    if (decoded.role === "superuser" || (roles && roles.includes(decoded.role))) {
+    // Automatically allow superadmin to access all protected routes
+    if (decoded.role === "superadmin" || (roles && roles.includes(decoded.role))) {
       req.user = decoded;
       return next();
     }
