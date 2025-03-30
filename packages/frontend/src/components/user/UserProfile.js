@@ -17,10 +17,10 @@ const UserProfile = () => {
   };
 
   const isFormValid = () => {
-    return experienceData.some(exp => exp.skills && exp.years && exp.lastWorked && exp.version) &&
-           companyData.some(comp => comp.companyName && comp.startDate && ((!comp.isPresent && comp.endDate) || comp.isPresent ) );
+    return experienceData.every(exp => exp.skills && exp.years && exp.lastWorked && exp.version) &&
+           companyData.every(comp => comp.companyName && comp.startDate && ((!comp.isPresent && comp.endDate) || comp.isPresent));
   };
-
+  
   const getMaxFutureDate = () => {
     return "";
   };
