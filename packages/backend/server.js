@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/auth");
 const userRoute = require("./routes/userRoute");
+const profileRoute = require("./routes/profileRoute");
+
 const cors = require("cors");
 
 // Load environment variables
@@ -37,6 +39,7 @@ mongoose
 // Use the auth routes
 app.use("/auth", authRoutes);
 app.use("/users", userRoute);
+app.use("/profile", profileRoute);
 
 // Start the server
 const port = process.env.PORT || 5000;

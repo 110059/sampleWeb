@@ -65,4 +65,53 @@ router.put("/:id/role", authMiddleware(["admin"]), async (req, res) => {
   }
 });
 
+// router.get("/profile", authMiddleware(["user", "admin", "superadmin"]), async (req, res) => {
+//   try {
+//     const user = await User.findById(req.user.id).select("-password");
+//     if (!user) return res.status(404).json({ message: "User not found" });
+//     res.json(user);
+//   } catch (error) {
+//     console.error("Error fetching profile:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+// router.put("/profile", authMiddleware(["user", "admin", "superadmin"]), async (req, res) => {
+//   try {
+
+//     console.log('request--> ', req)
+//     let { experienceData, companyData } = req.body;
+
+//     const experience = experienceData.map(exp => ({
+//       skills: exp.skills,
+//       years: exp.years,
+//       lastWorked: exp.lastWorked ? new Date(exp.lastWorked) : null
+//     }));
+
+//     const companyDetails = companyData.map(company => ({
+//       companyName: company.companyName,
+//       startDate: new Date(company.startDate),
+//       endDate: company.endDate ? new Date(company.endDate) : null,
+//       isPresent: company.isPresent
+//     }));
+
+//     const updatedUser = await User.findByIdAndUpdate(
+//       req.user.id,
+//       { experience, companyDetails },
+//       { new: true, runValidators: true }
+//     ).select("-password");
+
+//     console.log('updatedUser', updatedUser)
+
+//     if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+//     res.json({ message: "Profile updated successfully!", user: updatedUser });
+//   } catch (error) {
+//     console.error("Error updating profile:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+
+
 module.exports = router;
