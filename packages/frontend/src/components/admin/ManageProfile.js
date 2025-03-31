@@ -24,6 +24,7 @@ const ManageProfile = () => {
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
+      showErrorToast("Error fetching users");
     }
   };
 
@@ -41,6 +42,8 @@ const ManageProfile = () => {
       fetchUsers();
     } catch (error) {
       console.error("Error changing user status.");
+      showErrorToast("Error changing user status.");
+
     }
   };
 
@@ -59,6 +62,7 @@ const ManageProfile = () => {
       fetchUsers();
     } catch (error) {
       console.error("Error updating user role:", error);
+      showErrorToast("Error updating user role");
     }
   };
 
