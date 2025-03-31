@@ -6,7 +6,7 @@ import { showSuccessToast, showErrorToast } from "./../../../src/utilities/toast
 
 const UserProfile = () => {
   const [experienceData, setExperienceData] = useState([
-    { skills: "", years: "", lastWorked: "", version: "" },
+    { skills: "", years: "", months: "", lastWorked: "", version: "" },
   ]);
   
   const [companyData, setCompanyData] = useState([
@@ -35,10 +35,11 @@ const UserProfile = () => {
               ? experience.map(exp => ({
                   skills: exp.skills || "",
                   years: exp.years || "",
+                  months: exp.months || "",
                   lastWorked: formatDateForInput(exp.lastWorked),  // Fix format here
                   version: exp.version || "",
                 }))
-              : [{ skills: "", years: "", lastWorked: "", version: "" }]
+              : [{ skills: "", years: "", months: "", lastWorked: "", version: "" }]
           );
     
           setCompanyData(
@@ -68,7 +69,7 @@ const UserProfile = () => {
   }, []);
 
   const isFormValid = () => {
-    return experienceData.every(exp => exp.skills && exp.years && exp.lastWorked && exp.version) &&
+    return experienceData.every(exp => exp.skills && exp.years && exp.months && exp.lastWorked && exp.version) &&
            companyData.every(comp => comp.companyName && comp.startDate && ((!comp.isCurrent && comp.endDate) || comp.isCurrent));
   };
 
@@ -131,7 +132,7 @@ const UserProfile = () => {
                 </div>
                 <div className="col-md-2">
                   <label className="form-label">Version *</label>
-                  <input type="number" className="form-control" value={exp.version}
+                  <input type="number" className="form-control" value={exp.version} min="0"
                     onChange={(e) => {
                       const updated = [...experienceData];
                       updated[index].version = e.target.value;
@@ -139,12 +140,22 @@ const UserProfile = () => {
                     }}
                   />
                 </div>
-                <div className="col-md-3">
-                  <label className="form-label">Experience (Yrs) *</label>
-                  <input type="number" className="form-control" value={exp.years}
+                <div className="col-md-2">
+                  <label className="form-label">Exp. (Yrs) *</label>
+                  <input type="number" className="form-control" value={exp.years} min="0"
                     onChange={(e) => {
                       const updated = [...experienceData];
                       updated[index].years = e.target.value;
+                      setExperienceData(updated);
+                    }}
+                  />
+                </div>
+                <div className="col-md-2">
+                  <label className="form-label">Exp. (Month) *</label>
+                  <input type="number" className="form-control" value={exp.months} min="0"
+                    onChange={(e) => {
+                      const updated = [...experienceData];
+                      updated[index].months = e.target.value;
                       setExperienceData(updated);
                     }}
                   />
@@ -171,7 +182,7 @@ const UserProfile = () => {
               </div>
             </div>
           ))}
-          <button className="btn btn-sm btn-primary" onClick={() => setExperienceData([...experienceData, { skills: "", years: "", lastWorked: "", version: "" }])}>
+          <button className="btn btn-sm btn-primary" onClick={() => setExperienceData([...experienceData, { skills: "", years: "", months: "", lastWorked: "", version: "" }])}>
             Add More Experience
           </button>
         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes, FaChevronRight, FaUser, FaRobot } from "react-icons/fa";
+import { FaBars, FaTimes, FaChevronRight, FaUser, FaRobot, FaBookOpen } from "react-icons/fa";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -72,6 +72,10 @@ const Sidebar = () => {
             <Link to="/admin/manage-profile" className="nav-link d-flex align-items-center text-danger">
               <FaUser className="me-2" />
               {!isCollapsed && "Manage Profiles"}
+            </Link>
+            <Link to="/admin/manage-skill" className="nav-link d-flex align-items-center text-danger">
+              <FaBookOpen className="me-2" />
+              {!isCollapsed && "Manage Skills"}
             </Link>
           </li>
         ) : (

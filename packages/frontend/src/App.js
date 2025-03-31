@@ -14,6 +14,7 @@ import UserProfile from "./components/user/UserProfile";
 import FaceDetection from "./components/common/FaceDetection";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SkillForm from "./components/admin/SkillForm";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
           <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin", "superadmin"]} />}>
             <Route index element={<Layout><AdminDashboard /></Layout>} />
             <Route path="manage-profile" element={<Layout><ManageProfile /></Layout>} />
+            <Route path="manage-skill" element={<Layout><SkillForm /></Layout>} />
+
           </Route>
 
           {/* User Routes (Admins cannot access `/user/manage-profile`) */}

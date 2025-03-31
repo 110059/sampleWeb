@@ -14,6 +14,7 @@ router.put("/", authMiddleware(["user", "admin", "superadmin"]), async (req, res
     const experience = experienceData.map(exp => ({
       skills: exp.skills || "",
       years: exp.years || 0,
+      months: exp.months || 0,
       version: exp.version || 0,
       lastWorked: exp.lastWorked ? new Date(exp.lastWorked) : null
     }));

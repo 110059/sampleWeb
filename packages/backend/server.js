@@ -1,9 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const profileRoute = require("./routes/profileRoute");
+const skillRoute = require("./routes/skillRoute");
+const categoryRoute = require("./routes/categoryRoute");
+
 
 const cors = require("cors");
 
@@ -40,6 +43,9 @@ mongoose
 app.use("/auth", authRoutes);
 app.use("/users", userRoute);
 app.use("/profile", profileRoute);
+app.use("/skills", skillRoute);
+app.use("/categories", categoryRoute);
+
 
 // Start the server
 const port = process.env.PORT || 5000;
