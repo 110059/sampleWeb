@@ -21,6 +21,13 @@ const SkillForm = () => {
   const [showSkillModal, setShowSkillModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+
+  // Sorting states
+  const [sortConfig, setSortConfig] = useState({ key: "category", direction: "asc" });
+
   useEffect(() => {
     const fetchData = async () => {
       const token = sessionStorage.getItem("token");
@@ -82,6 +89,30 @@ const SkillForm = () => {
     }
   };
 
+   // Sorting function
+   const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+
+    const sortedSkills = [...skills].sort((a, b) => {
+      if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
+      if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    setSkills(sortedSkills);
+  };
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = skills.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(skills.length / itemsPerPage);
+
+
   return (
     <div className="d-flex" style={{ height: "85vh" }}>
       <Sidebar />
@@ -91,18 +122,38 @@ const SkillForm = () => {
           {/* Skills Table */}
           <div className="card shadow p-4 mb-3">
             <h3 className="text-primary mb-3">Skills & Categories</h3>
+
+            {/* Pagination Controls */}
+            <div className="d-flex justify-content-between mb-2">
+              <span>Total Skills: {skills.length}</span>
+              <div>
+                <label className="me-2">Rows per page:</label>
+                <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))}>
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                </select>
+              </div>
+            </div>
+
             <div style={{ maxHeight: "450px", overflowY: "auto" }}>
               <table className="table table-bordered">
                 <thead className="table-light">
                   <tr>
-                    <th>Category</th>
-                    <th>Skill Name</th>
-                    <th>Version</th>
+                    <th onClick={() => handleSort("category")} style={{ cursor: "pointer" }}>
+                      Category {sortConfig.key === "category" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                    </th>
+                    <th onClick={() => handleSort("name")} style={{ cursor: "pointer" }}>
+                      Skill Name {sortConfig.key === "name" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                    </th>
+                    <th onClick={() => handleSort("version")} style={{ cursor: "pointer" }}>
+                      Version {sortConfig.key === "version" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {skills.length > 0 ? (
-                    skills.map((skill, index) => (
+                  {currentItems.length > 0 ? (
+                    currentItems.map((skill, index) => (
                       <tr key={index}>
                         <td>{skill.category}</td>
                         <td>{skill.name}</td>
@@ -116,6 +167,19 @@ const SkillForm = () => {
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Pagination Buttons */}
+            <div className="d-flex justify-content-between align-items-center mt-3">
+              <button className="btn btn-secondary" onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+                Previous
+              </button>
+
+              <span>Page {currentPage} of {totalPages}</span>
+
+              <button className="btn btn-secondary" onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+                Next
+              </button>
             </div>
           </div>
 
