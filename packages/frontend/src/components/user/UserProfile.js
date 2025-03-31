@@ -119,7 +119,7 @@ const UserProfile = () => {
           {experienceData.map((exp, index) => (
             <div key={index} className="border rounded p-3 mb-3 bg-white">
               <div className="row align-items-center">
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <label className="form-label">Skill Name *</label>
                   <input type="text" className="form-control" value={exp.skills} 
                     onChange={(e) => {
@@ -139,7 +139,7 @@ const UserProfile = () => {
                     }}
                   />
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-3">
                   <label className="form-label">Experience (Yrs) *</label>
                   <input type="number" className="form-control" value={exp.years}
                     onChange={(e) => {
@@ -215,19 +215,27 @@ const UserProfile = () => {
                     max={company.isCurrent ? getMaxFutureDate() : getCurrentMonthYear()}
                   />
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-2 d-flex flex-column">
+                  <label className="form-label">Present Company</label>
                   <div className="form-check mt-2">
-                    <input className="form-check-input" type="checkbox" checked={company.isCurrent}
+                    <input
+                      className="form-check-input mt-1"
+                      type="checkbox"
+                      checked={company.isCurrent}
                       onChange={() => {
-                        const updated = [...companyData];
-                        updated[index].isCurrent = !updated[index].isCurrent;
-                        updated[index].endDate = updated[index].isCurrent ? "" : company.endDate;
+                        const updated = companyData.map((comp, i) => {
+                          if (i === index) {
+                            return { ...comp, isCurrent: !comp.isCurrent, endDate: !comp.isCurrent ? "" : comp.endDate };
+                          } else {
+                            return { ...comp, isCurrent: false, endDate: comp.endDate || "" }; // Enable endDate
+                          }
+                        });
                         setCompanyData(updated);
                       }}
                     />
-                    <label className="form-check-label">Present Company</label>
                   </div>
                 </div>
+
                 {companyData.length > 1 && (
                   <div className="col-md-1">
                     <button className="btn btn-danger btn-sm mt-4" onClick={() => setCompanyData(companyData.filter((_, i) => i !== index))}>

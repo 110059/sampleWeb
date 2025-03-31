@@ -101,7 +101,6 @@ const Register = () => {
                   onChange={handlePhoneChange}
                   placeholder="Enter phone number (with country code)"
                 />
-                {/* {error && <small className="text-danger">{error}</small>} */}
               </div>
               <div className="form-group mt-3">
                 <label>Password</label>

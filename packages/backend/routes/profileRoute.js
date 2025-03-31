@@ -6,7 +6,7 @@ const Profile = require("../models/Profile");
 router.put("/", authMiddleware(["user", "admin", "superadmin"]), async (req, res) => {
   try {
     const userId = req.user.id;
-    let { experienceData, companyData, phone, address } = req.body;
+    let { experienceData, companyData, address } = req.body;
 
     console.log("Received Payload:", req.body);  // Debugging
 
@@ -29,7 +29,7 @@ router.put("/", authMiddleware(["user", "admin", "superadmin"]), async (req, res
     // Update or create profile
     const updatedProfile = await Profile.findOneAndUpdate(
       { user: userId },
-      { phone, address, experience, companyDetails },
+      { address, experience, companyDetails },
       { new: true, upsert: true, runValidators: true }
     );
 

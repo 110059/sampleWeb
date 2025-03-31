@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const profileSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, unique: true }, // Link to User
-  phone: { type: String, default: "" },
   address: { type: String, default: "" },  
   experience: [{
     years: { type: Number, min: 0, default: 0 },
