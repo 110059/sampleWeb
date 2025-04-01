@@ -100,7 +100,7 @@ const ManageProfile = () => {
   return (
     <div className="d-flex" style={{ height: "85vh" }}>
       <Sidebar />
-      <div className="col-md-9 p-4">
+      <div className="col-md-9 p-4 d-flex flex-column">
         <h2>Manage Users</h2>
         <input
           type="text"
@@ -109,61 +109,66 @@ const ManageProfile = () => {
           value={searchTerm}
           onChange={handleSearch}
         />
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th onClick={() => handleSort("name")}>
-                Name {sortConfig.key === "name" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
-              </th>
-              <th onClick={() => handleSort("email")}>
-                Email {sortConfig.key === "email" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
-              </th>
-              <th onClick={() => handleSort("role")}>
-                Role {sortConfig.key === "role" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
-              </th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.map((user) => (
-              <tr 
-                key={user._id} 
-                className={`user-row ${user.isActive ? "active" : "disabled"} ${user.role === "superadmin" ? "superadmin-row" : ""}`}
-              >
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  {user.role === "superadmin" ? (
-                    <span className="badge bg-primary">Superadmin</span>
-                  ) : (
-                    <select 
-                      value={user.role} 
-                      onChange={(e) => updateUserRole(user._id, e.target.value, user.role === "superadmin")}
-                      className="form-control"
-                    >
-                      {roles.map(role => (
-                        <option key={role} value={role}>{role}</option>
-                      ))}
-                    </select>
-                  )}
-                </td>
-                <td>{user.isActive ? "Active" : "Disabled"}</td>
-                <td>
-                  <button
-                    className={`btn btn-${user.isActive ? "danger" : "success"} btn-sm`}
-                    onClick={() => toggleUserStatus(user._id, user.role === "superadmin")}
-                  >
-                    {user.isActive ? "Disable" : "Enable"}
-                  </button>
-                </td>
+  
+        {/* Table Container with Scroll */}
+        <div className="table-responsive" style={{ maxHeight: "60vh", overflowY: "auto" }}>
+          <table className="table table-bordered">
+            <thead className="table-dark" style={{ position: "sticky", top: 0, zIndex: 2 }}>
+              <tr>
+                <th onClick={() => handleSort("name")}>
+                  Name {sortConfig.key === "name" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                </th>
+                <th onClick={() => handleSort("email")}>
+                  Email {sortConfig.key === "email" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                </th>
+                <th onClick={() => handleSort("role")}>
+                  Role {sortConfig.key === "role" ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                </th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredUsers.map((user) => (
+                <tr 
+                  key={user._id} 
+                  className={`user-row ${user.isActive ? "active" : "disabled"} ${user.role === "superadmin" ? "superadmin-row" : ""}`}
+                >
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    {user.role === "superadmin" ? (
+                      <span className="badge bg-primary">Superadmin</span>
+                    ) : (
+                      <select 
+                        value={user.role} 
+                        onChange={(e) => updateUserRole(user._id, e.target.value, user.role === "superadmin")}
+                        className="form-control"
+                      >
+                        {roles.map(role => (
+                          <option key={role} value={role}>{role}</option>
+                        ))}
+                      </select>
+                    )}
+                  </td>
+                  <td>{user.isActive ? "Active" : "Disabled"}</td>
+                  <td>
+                    <button
+                      className={`btn btn-${user.isActive ? "danger" : "success"} btn-sm`}
+                      onClick={() => toggleUserStatus(user._id, user.role === "superadmin")}
+                    >
+                      {user.isActive ? "Disable" : "Enable"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
+  
 };
 
 export default ManageProfile;

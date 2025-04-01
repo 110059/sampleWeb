@@ -120,7 +120,7 @@ const SkillForm = () => {
         <div style={{ width: "85%", marginLeft: "10px" }}>
 
           {/* Skills Table */}
-          <div className="card shadow p-4 mb-3">
+          <div className="card shadow p-4 mb-3" style={{ maxHeight: "70vh", overflowY: "auto" }}> 
             <h3 className="text-primary mb-3">Skills & Categories</h3>
 
             {/* Pagination Controls */}

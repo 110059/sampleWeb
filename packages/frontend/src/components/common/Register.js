@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-
 const Register = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
@@ -48,60 +47,75 @@ const Register = () => {
     setPhone(input);
 
     const phoneNumber = parsePhoneNumberFromString(input);
-
-    // Use optional chaining to check validity safely
     setError(phoneNumber?.isValid() ? "" : "Invalid phone number format");
   };
 
   return (
-    <div className="container text-center mt-5">
-      <h1>Register for VedTry</h1>
-      <div className="row justify-content-center mt-3">
+    <div className="d-flex flex-column min-vh-100">
+      {/* Main Content */}
+      <div className="container flex-grow-1 d-flex align-items-center justify-content-center">
         <div className="col-md-6">
-          <div className="card p-4 shadow-sm">
+          <div className="card p-4 shadow-sm w-85 mt-5">
+            <h2 className="text-center">Register for VedTry</h2>
             {error && <div className="alert alert-danger">{error}</div>}
             {success && <div className="alert alert-success">{success}</div>}
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
+              {/* Name & Username in One Row */}
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>Username</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="form-group mt-3">
-                <label>Username</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
+
+              {/* Email & Phone in One Row */}
+              <div className="row mt-3">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>Email</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>Phone Number (optional)</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      value={phone}
+                      onChange={handlePhoneChange}
+                      placeholder="Enter phone number (with country code)"
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="form-group mt-3">
-                <label>Email</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group mt-3">
-                <label>Phone Number (optional)</label>
-                <input
-                  type="tel"
-                  className="form-control"
-                  value={phone}
-                  onChange={handlePhoneChange}
-                  placeholder="Enter phone number (with country code)"
-                />
-              </div>
+
               <div className="form-group mt-3">
                 <label>Password</label>
                 <input
@@ -114,6 +128,7 @@ const Register = () => {
                   required
                 />
               </div>
+
               <div className="form-group mt-3">
                 <label>Role</label>
                 <select
@@ -126,16 +141,19 @@ const Register = () => {
                   <option value="admin">Admin</option>
                 </select>
               </div>
+
               <button type="submit" className="btn btn-primary mt-3 w-100">
                 Register
               </button>
             </form>
-            <p className="mt-3">
+            <p className="mt-3 text-center">
               Already have an account? <a href="/login">Login here</a>
             </p>
           </div>
         </div>
       </div>
+
+     
     </div>
   );
 };
