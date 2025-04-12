@@ -1,0 +1,34 @@
+# version: "3.8"
+
+services:
+  mongo:
+    image: mongo
+    container_name: vedtry-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./packages/backend
+    container_name: vedtry-backend
+    ports:
+      - "8081:8081"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/vedtry
+      - JWT_SECRET=your_secret_key
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./packages/frontend
+    container_name: vedtry-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8081
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:

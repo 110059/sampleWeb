@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes, FaChevronRight, FaUser, FaRobot, FaBookOpen } from "react-icons/fa";
+import { FaBars, FaTimes, FaChevronRight, FaUser, FaRobot, FaBookOpen, FaKey } from "react-icons/fa";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -18,7 +18,7 @@ const Sidebar = () => {
         padding: "10px",
       }}
     >
-      {/* Toggle Sidebar Button (Placed at the top-left) */}
+{/* Toggle Sidebar Button (Placed at the top-left) */}
       <button
         className="btn btn-sm btn-outline-primary mb-3"
         style={{
@@ -33,6 +33,14 @@ const Sidebar = () => {
       {!isCollapsed && <h5 className="text-center mb-4">Menu</h5>}
 
       <ul className="nav flex-column w-100">
+
+      <li className="nav-item">
+          <Link to="/change-password" className="nav-link d-flex align-items-center text-dark">
+            <FaKey className="me-2" />
+            {!isCollapsed && "Change Password"}
+          </Link>
+        </li>
+
         <li className="nav-item">
           <Link to="/face-detection" className="nav-link d-flex align-items-center text-dark">
             <FaRobot className="me-2" />
@@ -40,7 +48,7 @@ const Sidebar = () => {
           </Link>
         </li>
 
-        {/* Nested Sample Links */}
+{/* Nested Sample Links */}
         <li className="nav-item">
           <div
             className="nav-link d-flex align-items-center text-dark"
@@ -66,18 +74,22 @@ const Sidebar = () => {
           )}
         </li>
 
-        {/* Role-based links */}
+{/* Role-based links */}
         {(role === "admin" || role === "superadmin") ? (
-          <li className="nav-item">
-            <Link to="/admin/manage-profile" className="nav-link d-flex align-items-center text-danger">
-              <FaUser className="me-2" />
-              {!isCollapsed && "Manage Profiles"}
-            </Link>
-            <Link to="/admin/manage-skill" className="nav-link d-flex align-items-center text-danger">
-              <FaBookOpen className="me-2" />
-              {!isCollapsed && "Manage Skills"}
-            </Link>
-          </li>
+          <>
+            <li className="nav-item">
+              <Link to="/admin/manage-profile" className="nav-link d-flex align-items-center text-danger">
+                <FaUser className="me-2" />
+                {!isCollapsed && "Manage Profiles"}
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/admin/manage-skill" className="nav-link d-flex align-items-center text-danger">
+                <FaBookOpen className="me-2" />
+                {!isCollapsed && "Manage Skills"}
+              </Link>
+            </li>
+          </>
         ) : (
           <li className="nav-item">
             <Link to="/user/manage-profile" className="nav-link d-flex align-items-center text-success">

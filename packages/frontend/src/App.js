@@ -15,6 +15,7 @@ import FaceDetection from "./components/common/FaceDetection";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SkillForm from "./components/admin/SkillForm";
+import ChangePassword from "./components/common/ChangePassword";
 
 function App() {
   return (
@@ -47,6 +48,11 @@ function App() {
           <Route path="/face-detection" element={<ProtectedRoute allowedRoles={["user", "admin", "superadmin"]} />}>
             <Route index element={<Layout><FaceDetection /></Layout>} />
           </Route>
+
+           {/* Common Feature Route (Face Detection) */}
+           <Route path="/change-password" element={<ProtectedRoute allowedRoles={["user", "admin", "superadmin"]} />}>
+            <Route index element={<Layout><ChangePassword /></Layout>} />
+         </Route>
 
           {/* Catch-All 404 */}
           <Route path="*" element={<Layout><NotFound /></Layout>} />

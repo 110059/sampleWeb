@@ -51,7 +51,7 @@ const Register = () => {
   };
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div className="d-flex flex-column min-vh-85">
       {/* Main Content */}
       <div className="container flex-grow-1 d-flex align-items-center justify-content-center">
         <div className="col-md-6">
