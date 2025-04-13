@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import FaceCapture from "./FaceCapture"; 
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -12,6 +13,8 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [phone, setPhone] = useState("");
+  const [faceImage, setFaceImage] = useState(null);
+
 
   const navigate = useNavigate();
 
@@ -28,7 +31,7 @@ const Register = () => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_REGISTER}`,
-        { name, username, email, password, role, phone }
+        { name, username, email, password, role, phone, faceImage }
       );
 
       if (response) {
@@ -141,6 +144,11 @@ const Register = () => {
                   <option value="admin">Admin</option>
                 </select>
               </div>
+
+            {/* face capture */}
+
+            <FaceCapture onCapture={(imageData) => setFaceImage(imageData)} />
+
 
               <button type="submit" className="btn btn-primary mt-3 w-100">
                 Register

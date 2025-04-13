@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
+const fs = require("fs");
+const path = require("path");
 
 
 router.get("/test", (req, res) => {
@@ -12,7 +14,7 @@ router.get("/test", (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    const { name, username, email, password, role, phone } = req.body;
+    const { name, username, email, password, role, phone, faceImage } = req.body;
 
     // Validate required fields
     if (!name || !username || !email || !password) {
@@ -24,6 +26,15 @@ router.post("/register", async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "Username or Email already taken." });
     }
+
+
+    //save face image
+    if (faceImage) {
+      const base64Data = faceImage.replace(/^data:image\/jpeg;base64,/, "");
+      const imagePath = path.join(__dirname, `../faces/${username}.jpg`);
+      fs.writeFileSync(imagePath, base64Data, "base64");
+    }
+    
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
