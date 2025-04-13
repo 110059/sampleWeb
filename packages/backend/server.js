@@ -6,6 +6,7 @@ const userRoute = require("./routes/userRoute");
 const profileRoute = require("./routes/profileRoute");
 const skillRoute = require("./routes/skillRoute");
 const categoryRoute = require("./routes/categoryRoute");
+const resumeRoute = require("./routes/resumeRoute");
 
 
 const cors = require("cors");
@@ -45,6 +46,7 @@ app.use("/users", userRoute);
 app.use("/profile", profileRoute);
 app.use("/skills", skillRoute);
 app.use("/categories", categoryRoute);
+app.use("/resume", resumeRoute);
 
 
 // Start the server

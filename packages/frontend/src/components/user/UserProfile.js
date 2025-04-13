@@ -105,6 +105,50 @@ const UserProfile = () => {
     }
   };
 
+
+  // resume upload logic
+  const handleResumeUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    try {
+      const token = sessionStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("resume", file);
+  
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/resume/parse`,
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      const extractedSkills = response?.data?.skills || [];
+      const existingSkills = experienceData.map(exp => exp.skills.toLowerCase());
+  
+      const newSkills = extractedSkills.filter(skill => !existingSkills.includes(skill.toLowerCase()));
+  
+      const updatedExperienceData = [...experienceData];
+  
+      newSkills.forEach(skill => {
+        updatedExperienceData.push({
+          skills: skill,
+          years: "",
+          months: "",
+          lastWorked: "",
+          version: "",
+        });
+      });
+  
+      setExperienceData(updatedExperienceData);
+  
+      showSuccessToast("Skills extracted from resume successfully!");
+    } catch (error) {
+      console.error("Resume parsing failed", error);
+      showErrorToast("Failed to extract skills. Please try again.");
+    }
+  };
+  
+
   if (loading) return <p>Loading profile...</p>;
   if (error) return <p className="text-danger">{error}</p>;
 
@@ -113,6 +157,18 @@ const UserProfile = () => {
       <Sidebar />
       <div className="col-md-9 d-flex flex-column p-4 overflow-auto">
         <h2 className="mb-4">Manage Profile</h2>
+
+        {/* resume upload */}
+        <div className="p-3 border rounded mb-4 bg-light">
+          <h4>Upload Resume to Extract Skills</h4>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            className="form-control"
+            onChange={handleResumeUpload}
+          />
+        </div>
+
 
         {/* Experience Section */}
         <div className="p-3 border rounded mb-4 bg-light">
