@@ -1,20 +1,36 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
-
-  // Fetch the token and username from sessionStorage (if available)
   const token = sessionStorage.getItem("token");
-  const username = sessionStorage.getItem("username"); // assuming you save username during login
+  const username = sessionStorage.getItem("username");
 
-  // Logout functionality
+  const [profileImageUrl, setProfileImageUrl] = useState("/default-avatar.jpg"); // dummy avatar by default
+
+  useEffect(() => {
+    if (username) {
+
+      const imageUrl = `${process.env.REACT_APP_API_URL}/faces/${username}.jpg`;
+
+      // Check if image exists
+      fetch(imageUrl)
+        .then((res) => {
+          if (res.ok) {
+            setProfileImageUrl(imageUrl);
+          }
+        })
+        .catch(() => {
+          // Use default if there's an error
+          setProfileImageUrl("/default-avatar.jpg");
+        });
+    }
+  }, [username]);
+
   const handleLogout = () => {
-    // Remove token and username from sessionStorage
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("token_expiry");
-
-    // Redirect to Login page
     navigate("/login");
   };
 
@@ -23,17 +39,26 @@ const Header = () => {
       <div className="container">
         <div className="row">
           <div className="col-6">
-            {/* Homepage link added to VedTry */}
             <h2 style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
               VedTry
             </h2>
           </div>
           <div className="col-6 text-right d-flex justify-content-end align-items-center">
-            {/* Show username and logout button only if user is logged in */}
             {token ? (
               <>
-                <span className="mr-3">Hello, {username}</span>&nbsp;&nbsp;
-                {/* Display username */}
+                <img
+                  src={profileImageUrl}
+                  alt="User"
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    marginRight: 10,
+                  }}
+                  onError={() => setProfileImageUrl("/default-avatar.jpg")}
+                />
+                <span className="mr-3">Hello, {username} &nbsp;&nbsp;</span>
                 <button className="btn btn-danger" onClick={handleLogout}>
                   Logout
                 </button>

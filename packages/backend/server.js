@@ -7,6 +7,7 @@ const profileRoute = require("./routes/profileRoute");
 const skillRoute = require("./routes/skillRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const resumeRoute = require("./routes/resumeRoute");
+const path = require("path");
 
 
 const cors = require("cors");
@@ -27,6 +28,9 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: true })); // Important for form data
+
+app.use("/faces", express.static(path.join(__dirname, "faces")));
+
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
