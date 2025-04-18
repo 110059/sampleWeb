@@ -91,12 +91,20 @@ const Sidebar = () => {
             </li>
           </>
         ) : (
+           <>
           <li className="nav-item">
             <Link to="/user/manage-profile" className="nav-link d-flex align-items-center text-success">
               <FaUser className="me-2" />
               {!isCollapsed && "Manage User Profile"}
             </Link>
           </li>
+            <li className="nav-item">
+            <Link to="/user/recognize" className="nav-link d-flex align-items-center text-success">
+              <FaUser className="me-2" />
+              {!isCollapsed && "Recognize"}
+            </Link>
+          </li>
+          </>
         )}
       </ul>
     </div>

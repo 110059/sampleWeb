@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@tensorflow-models/mobilenet": "^2.x.x",
     "@tensorflow/tfjs-node": "^4.22.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
