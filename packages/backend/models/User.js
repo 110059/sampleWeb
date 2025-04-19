@@ -22,8 +22,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false,
     unique: true,
-    sparse: true 
-  },
+    sparse: true, // Only index when field exists
+    default: undefined, // <- do NOT set it to empty string
+  },  
   password: {
     type: String,
     required: true,

@@ -12,7 +12,7 @@ const Register = () => {
   const [role, setRole] = useState("user");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(null);
   const [faceImage, setFaceImage] = useState(null);
 
 

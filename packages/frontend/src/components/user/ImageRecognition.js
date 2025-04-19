@@ -4,7 +4,6 @@ import Sidebar from "../common/Sidebar";
 
 const ImageRecognition = () => {
   const [selectedImage, setSelectedImage] = useState(null);
-  //const [predictions, setPredictions] = useState([]);
   const [recognizedItems, setRecognizedItems] = useState([]);
 
   const handleImageChange = (e) => {
